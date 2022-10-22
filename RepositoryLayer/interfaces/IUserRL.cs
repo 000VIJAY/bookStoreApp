@@ -10,5 +10,6 @@ namespace RepositoryLayer.interfaces
         void RegisterUser(RegisterModel register);
         string LoginUser(loginModel login);
         bool ForgotPassword(string email);
+        bool ResetPassword(ResetPasswordModel resetPasswordModel, string email);
     }
 }

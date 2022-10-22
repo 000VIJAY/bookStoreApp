@@ -91,6 +91,8 @@ namespace BookStoreApp
             });
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<IUserBL, UserBL>();
+            services.AddTransient<IAdminRL, AdminRL>();
+            services.AddTransient<IAdminBL, AdminBL>();
 
         }
 

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.interfaces;
 using CommonLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -58,6 +59,28 @@ namespace BookStoreApp.Controllers
                     return this.Ok(new { success = true, status = 200, message = $"Reset password link has been sent to {email}" });
                 }
                 return this.BadRequest(new { success = false, status = 401, message = "Wrong email" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("ResetPassword/{email}")]
+        public IActionResult ResetPassword(ResetPasswordModel resetPasswordModel, string email)
+        {
+            try
+            {
+                if(resetPasswordModel.Newpassword != resetPasswordModel.ConfirmNewPassword)
+                {
+                    return this.BadRequest(new { success = false, status = 401, message = "new password and confirm new password are not same" });
+                }
+                var res = this._userBL.ResetPassword(resetPasswordModel,email);
+                if (res == true)
+                {
+                    return this.Ok(new { success = true, status = 200, message ="Password has been changed successfully"});
+                }
+                return this.BadRequest(new { success = false, status = 401, message = "wrong password" });
             }
             catch (Exception ex)
             {

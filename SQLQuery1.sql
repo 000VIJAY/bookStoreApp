@@ -48,3 +48,16 @@ begin catch
 print ERROR_MESSAGE()
 end catch
 end
+
+create procedure spResetPasswordUser
+@password varchar(50),
+@userId int
+as 
+begin 
+begin try
+	update userRegistration set password = @password where userId = @userId 
+end try
+begin catch
+print ERROR_MESSAGE()
+end catch
+end

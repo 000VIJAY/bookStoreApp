@@ -197,5 +197,31 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+
+        public bool ResetPassword(ResetPasswordModel resetPasswordModel ,string email)
+        { 
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(this._configuration.GetConnectionString("bookStore")))
+                {
+                    SqlCommand command = new SqlCommand("spResetPasswordUser",conn);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    conn.Open();
+                    SqlCommand comm = new SqlCommand("select userId from dbo.userRegistration where email = @email", conn);
+                    comm.Parameters.AddWithValue("@email", email);
+                    var id = comm.ExecuteScalar();
+                    var newId = Convert.ToInt32(id);
+
+                    command.Parameters.AddWithValue("@password", resetPasswordModel.Newpassword);
+                    command.Parameters.AddWithValue("@userId", newId);
+                    var val = command.ExecuteNonQuery();
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
