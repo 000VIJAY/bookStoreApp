@@ -61,3 +61,68 @@ begin catch
 print ERROR_MESSAGE()
 end catch
 end
+
+create table Book
+(
+bookId int primary key identity,
+bookimg varchar(600) ,
+Rating int ,
+RatingCount int, 
+bookName varchar(60) not null,
+[Description] varchar(2000),
+AuthorName varchar(60) not null,
+bookOriginalPrice money not null,
+bookDiscountedPrice money not null,
+bookQuantity int
+)
+
+create procedure spAddBook 
+@bookimg varchar(600) ,
+@Rating int ,
+@RatingCount int, 
+@bookName varchar(60) ,
+@Description varchar(2000),
+@AuthorName varchar(60),
+@bookOriginalPrice money,
+@bookDiscountedPrice money,
+@bookQuantity int
+as 
+begin
+insert into dbo.Book(bookimg,Rating,RatingCount,bookName,Description,AuthorName,bookOriginalPrice,bookDiscountedPrice,bookQuantity) 
+values(@bookimg,@Rating,@RatingCount,@bookName,@Description,@AuthorName,@bookOriginalPrice,@bookDiscountedPrice,@bookQuantity)
+end
+
+create procedure spDeleteBook 
+@bookId int
+as 
+begin
+delete from dbo.Book  where bookId = @bookId
+end
+
+select * from Book 
+
+select * from Admin 
+
+exec spDeleteBook 3
+drop proc spUpdateBook
+create procedure spUpdateBook 
+@bookId int,
+@bookimg varchar(600),
+@Rating int,
+@RatingCount int, 
+@bookName varchar(60) ,
+@Description varchar(2000),
+@AuthorName varchar(60),
+@bookOriginalPrice money,
+@bookDiscountedPrice money,
+@bookQuantity int
+as 
+begin
+update dbo.Book
+set bookimg=@bookimg,Rating=@Rating,RatingCount=@RatingCount,bookName =@bookName,Description=@Description,AuthorName=@AuthorName,
+bookOriginalPrice=@bookOriginalPrice,bookDiscountedPrice=@bookDiscountedPrice,bookQuantity = @bookQuantity where bookId = @bookId
+
+end
+--(bookimg,Rating,RatingCount,bookName,Description,AuthorName,bookOriginalPrice,bookDiscountedPrice,bookQuantity) 
+
+exec spUpdateBook 2,'' 

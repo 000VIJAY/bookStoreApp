@@ -85,6 +85,7 @@ namespace RepositoryLayer.Services
                     {
                     new Claim("email", email),
                     new Claim("userId",id.ToString()),
+                    new Claim(ClaimTypes.Role, "User"),
                     }),
                     Expires = DateTime.UtcNow.AddHours(2),
                     SigningCredentials =
