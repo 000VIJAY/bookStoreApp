@@ -99,30 +99,111 @@ begin
 delete from dbo.Book  where bookId = @bookId
 end
 
-select * from Book 
-
-select * from Admin 
 
 exec spDeleteBook 3
-drop proc spUpdateBook
 create procedure spUpdateBook 
 @bookId int,
 @bookimg varchar(600),
 @Rating int,
 @RatingCount int, 
-@bookName varchar(60) ,
-@Description varchar(2000),
-@AuthorName varchar(60),
-@bookOriginalPrice money,
 @bookDiscountedPrice money,
 @bookQuantity int
 as 
 begin
 update dbo.Book
-set bookimg=@bookimg,Rating=@Rating,RatingCount=@RatingCount,bookName =@bookName,Description=@Description,AuthorName=@AuthorName,
-bookOriginalPrice=@bookOriginalPrice,bookDiscountedPrice=@bookDiscountedPrice,bookQuantity = @bookQuantity where bookId = @bookId
+set bookimg=@bookimg,Rating=@Rating,RatingCount=@RatingCount,
+bookDiscountedPrice=@bookDiscountedPrice,bookQuantity = @bookQuantity where bookId = @bookId
 
 end
 --(bookimg,Rating,RatingCount,bookName,Description,AuthorName,bookOriginalPrice,bookDiscountedPrice,bookQuantity) 
 
-exec spUpdateBook 2,'' 
+exec spUpdateBook 3,'tbm=isch&sa=X&ved=2ahUKEwjE74Psyf36AhWU7HMBHa1DAiMQ_AUoAXoECAIQAw#imgrc=BD1Mn-7CrhkJeM',4,67,600,200 
+
+
+create table cart
+(cartId int Primary Key Identity,
+	Quantity int not null,
+	userId int not null Foreign key references dbo.userRegistration(userId),
+	bookId int not null Foreign key references dbo.Book(bookId)
+)
+select * from cart
+create procedure spAddCart
+@Quantity int,
+@userId int,
+@bookId int
+as
+begin
+insert into dbo.cart(Quantity,userId,bookId) values ( @Quantity,@userId,@bookId) 
+end
+
+create procedure spUpdateCart
+@CartId int,
+@Quantity int
+as
+begin
+update dbo.cart set Quantity = @Quantity where cartId = @CartId
+end
+
+select * from dbo.cart
+select * from Book 
+select * from userRegistration
+select * from Admin
+select * from dbo.WishList
+
+create table WishList
+(
+wishListId int Primary key Identity,
+userId int not null Foreign key references dbo.userRegistration(userId),
+bookId int not null Foreign key references dbo.Book(bookId)
+)
+
+create proc spAddToWishList
+@userId int,
+@bookId int
+as 
+begin 
+insert into dbo.WishList(userId,bookId) values(@userId,@bookId);
+end
+
+
+create table AddressType
+(typeId int primary key identity,
+AddressType varchar(60) not null )
+
+insert into AddressType(AddressType) values ('Home'),('Work'),('Others');
+
+select * from AddressType
+
+create table AddressDetails(
+AddressId int primary key identity,
+[Address] varchar(500) not null,
+City varchar(110) not null,
+[State] varchar(110) not null,
+typeId int not null Foreign key References AddressType(typeId),
+userId int not null Foreign key references dbo.userRegistration(userId)
+)
+
+create proc spAddAddress
+@Address varchar(max),
+@City varchar(110),
+@State varchar(110),
+@typeId int ,
+@userId int
+as 
+begin 
+insert into AddressDetails(Address,City,State,typeId,userId) values (@Address,@City,@State,@typeId,@userId)
+end
+
+create proc spUpdateAddress
+@AddressId int,
+@Address varchar(max),
+@City varchar(110),
+@State varchar(110),
+@typeId int
+as 
+begin 
+update AddressDetails set Address=@Address,City=@City,State=@State,typeId=@typeId where AddressId = @AddressId
+end
+
+
+select * from AddressDetails

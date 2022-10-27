@@ -41,14 +41,14 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return this.UpdateBook(book, bookId);
+                return this._bookRL.UpdateBook(book, bookId);
             }
             catch(Exception ex)
             {
                 throw ex;
             }
         }
-        public BookModel getBooksById(int bookId)
+        public GetBookModel getBooksById(int bookId)
         {
             try
             {
@@ -60,11 +60,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public List<BookModel> getAllBooks()
+        public List<GetBookModel> getAllBooks()
         {
             try
             {
-                return this.getAllBooks();
+                return this._bookRL.getAllBooks();
             }
             catch(Exception ex)
             {

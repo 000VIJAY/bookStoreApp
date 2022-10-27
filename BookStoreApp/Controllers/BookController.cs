@@ -24,6 +24,10 @@ namespace BookStoreApp.Controllers
         {
             try
             { 
+                if (bookModel.bookDiscountedPrice > bookModel.bookOriginalPrice)
+                {
+                    this.BadRequest(new { success = false, status = 400, message = "Discounted price should be less than or equal to original price" });
+                }
                 this._BookBL.addBook(bookModel);
                return this.Ok(new { success = true, status = 200, message ="Book Added successfully" });
             }

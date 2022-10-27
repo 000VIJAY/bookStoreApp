@@ -12,7 +12,7 @@ namespace BusinessLayer.interfaces
 
         UpdateBookModel UpdateBook(UpdateBookModel book, int bookId);
 
-        BookModel getBooksById(int bookId);
-        List<BookModel> getAllBooks();
+        GetBookModel getBooksById(int bookId);
+        List<GetBookModel> getAllBooks();
     }
 }
