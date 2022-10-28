@@ -101,6 +101,10 @@ namespace BookStoreApp
             services.AddTransient<IWishListBL, WishListBL>();
             services.AddTransient<IAddressRL, AddressRL>();
             services.AddTransient<IAddressBL, AddressBL>();
+            services.AddTransient<IOrderRL, OrderRL>();
+            services.AddTransient<IOrderBL, OrderBL>();
+            services.AddTransient<IFeedbackRL, FeedbackRL>();
+            services.AddTransient<IFeedbackBL, FeedbackBL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,7 +129,7 @@ namespace BookStoreApp
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FunDoNote v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store");
             });
         }
     }
