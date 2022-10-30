@@ -207,7 +207,7 @@ select * from dbo.cart
 select * from Book 
 select * from userRegistration
 select * from Admin
-select * from dbo.WishList
+select * from dbo.[Order]
 
 create table [Order]
 (orderId int Primary key Identity,

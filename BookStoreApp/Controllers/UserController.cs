@@ -3,6 +3,7 @@ using CommonLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace BookStoreApp.Controllers
@@ -13,10 +14,12 @@ namespace BookStoreApp.Controllers
     {
         readonly IConfiguration _configuration;
        readonly IUserBL _userBL;
-        public UserController(IConfiguration configuration, IUserBL userBL)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IConfiguration configuration, IUserBL userBL, ILogger<UserController> logger)
         {
             this._configuration = configuration;
             _userBL = userBL;
+            this._logger = logger;
         }
         [HttpPost("registerUser")]
         public IActionResult registerUser(RegisterModel registerModel)
@@ -24,7 +27,8 @@ namespace BookStoreApp.Controllers
             try
             {
                this._userBL.RegisterUser(registerModel);
-               return this.Ok(new { success = true, status = 200, message = $"Registration successful for {registerModel.email}" });
+                this._logger.LogInformation("New user registered successfully with email Id:" + registerModel.email);
+                return this.Ok(new { success = true, status = 200, message = $"Registration successful for {registerModel.email}" });
             }
             catch(Exception ex)
             {
@@ -39,6 +43,7 @@ namespace BookStoreApp.Controllers
                 var token = this._userBL.LoginUser(login);
                 if (token == null)
                 {
+                    this._logger.LogInformation(" user login successfully with email Id:" + login.email);
                     return this.BadRequest(new { success = false, status = 401, message = "Email not found" });
                 }
                 return this.Ok(new { success = true, status = 200,token= token, message = $"login successful {login.email}" });
@@ -56,6 +61,7 @@ namespace BookStoreApp.Controllers
                 var res = this._userBL.ForgotPassword(email);
                 if (res==true)
                 {
+                    this._logger.LogInformation("forget password has been sent successfully to email Id:" + email + "\n");
                     return this.Ok(new { success = true, status = 200, message = $"Reset password link has been sent to {email}" });
                 }
                 return this.BadRequest(new { success = false, status = 401, message = "Wrong email" });
@@ -78,6 +84,7 @@ namespace BookStoreApp.Controllers
                 var res = this._userBL.ResetPassword(resetPasswordModel,email);
                 if (res == true)
                 {
+                    this._logger.LogInformation(" password has been changed successfully");
                     return this.Ok(new { success = true, status = 200, message ="Password has been changed successfully"});
                 }
                 return this.BadRequest(new { success = false, status = 401, message = "wrong password" });
