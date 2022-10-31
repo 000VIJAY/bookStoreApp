@@ -34,6 +34,7 @@ namespace BookStoreApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
             services.AddSwaggerGen(swagger =>
             {
                 //This is to generate the Default UI of Swagger Documentation  
@@ -105,6 +106,12 @@ namespace BookStoreApp
             services.AddTransient<IOrderBL, OrderBL>();
             services.AddTransient<IFeedbackRL, FeedbackRL>();
             services.AddTransient<IFeedbackBL, FeedbackBL>();
+            services.AddDistributedRedisCache(
+              options =>
+              {
+                  options.Configuration = "Localhost:6379";
+              }
+              );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
